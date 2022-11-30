@@ -18,5 +18,5 @@ namespace HENets
     virtual void set_network_parms();
     virtual void prepare_weights();
     virtual std::vector<seal::Ciphertext> inference(const std::vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context, int slot_count, int scale); 
-  }
+  };
 }
