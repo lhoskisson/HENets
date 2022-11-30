@@ -17,11 +17,11 @@ namespace HENets
   bool Layer::import_weights(const string& path);
   {
     const cnpy::NpyArray weights_npy = cnpy::npy_load(path);
-    shape = weights_npy.shape();
+    shape = weights_npy.shape;
     weights = weights_npy.as_vec<double>();
   }
 
-  vector<seal::Ciphertext> Layer::inference(const vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context); 
+  vector<seal::Ciphertext> Layer::inference(const vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context, int slot_count, int scale); 
   {
     return vector<seal::Ciphertext>(input_ct);
   }

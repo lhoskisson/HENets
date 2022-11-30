@@ -8,6 +8,7 @@ namespace HENets
   {
     public:
     Conv2D(std::vector<int32_t> dimensions);
-    std::vector<seal::Ciphertext> inference(const std::vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context);
+    Conv2D(std::vector<int32_t> dimensions, const std::string& weights_file);
+    std::vector<seal::Ciphertext> inference(const std::vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context, int slot_count, int scale);
   }
 }
