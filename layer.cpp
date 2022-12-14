@@ -5,11 +5,11 @@ using namespace std;
 
 namespace HENets
 {
-  Layer::Layer(const string& type, const vector<int32_t>& shape) : type(type), shape(shape)
+  Layer::Layer(const vector<int32_t>& shape) : type(type), shape(shape)
   {
   }
 
-  Layer::Layer(const string& type, const vector<int32_t>& shape, const string& path) : type(type), shape(shape)
+  Layer::Layer(const vector<int32_t>& shape, const string& path) : type(type), shape(shape)
   {
     import_weights(weights_file);
   }
