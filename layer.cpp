@@ -5,23 +5,30 @@ using namespace std;
 
 namespace HENets
 {
-  Layer::Layer(const vector<int32_t>& shape) : type(type), shape(shape)
+  Layer::Layer(const vector<int32_t>& shape) : shape(shape)
   {
   }
 
-  Layer::Layer(const vector<int32_t>& shape, const string& path) : type(type), shape(shape)
+  Layer::Layer(const vector<int32_t>& shape, const string& path) : shape(shape)
   {
-    import_weights(weights_file);
+    import_weights(path);
   }
 
-  bool Layer::import_weights(const string& path);
+  Layer::~Layer()
   {
+  }
+
+  bool Layer::import_weights(const string& path)
+  {
+    //TODO: add trycatch and return false when file DNE 
     const cnpy::NpyArray weights_npy = cnpy::npy_load(path);
-    shape = weights_npy.shape;
+    for(int i=0; i<weights_npy.shape.size(); i++)
+      shape.push_back(weights_npy.shape[i]);
     weights = weights_npy.as_vec<double>();
+    return true;
   }
 
-  vector<seal::Ciphertext> Layer::inference(const vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context, int slot_count, int scale); 
+  vector<seal::Ciphertext> Layer::inference(const vector<seal::Ciphertext>& input_ct, const seal::SEALContext& context, int slot_count, int scale)
   {
     return vector<seal::Ciphertext>(input_ct);
   }

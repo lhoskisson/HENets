@@ -5,9 +5,9 @@ using namespace seal;
 
 namespace HENets
 {
-  Dense::Dense(vector<int32_t>& shape) : shape(shape) {}
+  Dense::Dense(vector<int32_t>& shape) : Layer(shape) {}
 
-  Dense::Dense(vector<int32_t>& shape, const string& weights_file) : shape(shape)
+  Dense::Dense(vector<int32_t>& shape, const string& weights_file) : Layer(shape, weights_file)
   {
     import_weights(weights_file);
   }
@@ -23,7 +23,7 @@ namespace HENets
 
   //currently assuming 1D or 2D input
   //TODO: get slot count and scale from context 
-  vector<Ciphertext> inference(const vector<Ciphertext>& input_ct, const SEALContext& context, int slot_count, int scale)
+  vector<Ciphertext> Dense::inference(const vector<Ciphertext>& input_ct, const SEALContext& context, int slot_count, int scale)
   {
     //setup seal objects
     Evaluator evaluator(context);
@@ -40,13 +40,14 @@ namespace HENets
 
     /* GENERAL DENSE LAYER */
     vector<Ciphertext> output_ct(input_ct.size());
-    int cur_weight_inx = 0;
+    int cur_weight_idx = 0;
     for(int i=0; i<input_ct.size(); i++) //for each ct 
     {
       //calculate the amount of slots used in the given ct
       int slots_used = inputs_per_ct*input_size;
-      //             total slots to be used - slots that have been used    < slots per ct
-      if((int dif = (input_size*output_size)-(i*inputs_per_ct*input_size)) < slot_count) 
+      int dif = 0;
+      //         total slots to be used - slots that have been used    < slots per ct
+      if((dif = (input_size*output_size)-(i*inputs_per_ct*input_size)) < slot_count) 
         slots_used = dif;	
 
       //prepare weights
@@ -68,5 +69,7 @@ namespace HENets
     }
     /* DENSE LAYER FOR POWER OF 2 */
     
+    //dummy return
+    return vector<Ciphertext>();
   }
 }
